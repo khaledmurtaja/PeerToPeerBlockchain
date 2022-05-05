@@ -19,24 +19,7 @@ public class Block {
     int Nonce = 0;
     String text;
     static public List<Block> blockChain = new ArrayList<>();
-    int Difficulty = 4;
-    static {
-        File myObj = new File("storage.txt");
-        try {
-
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
+    int Difficulty = 2;
     public Block() {
     }
 
@@ -45,7 +28,6 @@ public class Block {
         this.Time_Stamp = new Date().getTime();
         this.Previous_Hash_Block = previousHash;
         this.Hash = calculateHash();
-
     }
     public void SetBlock(Block block) {
         MineBlock();
@@ -106,24 +88,31 @@ public class Block {
     public void MineBlock() {
         String target = "";
         for (int i = 0; i < Difficulty; i++) {
-            target.concat("0");
+            target+="0";
         }
         System.out.println("mining in process...");
         while (!Hash.substring(0, Difficulty).equals(target)) {
             Nonce++;
+            System.out.println(Nonce);
             Hash = calculateHash();
         }
+        System.out.println("finish");
 
     }
 
-    public static void ExploreBlocks() {
+    public static String ExploreBlocks() {
+        String blockchain="";
+        System.out.println(blockChain.size());
         for (int i = 0; i < blockChain.size(); i++) {
             Block block = blockChain.get(i);
-            System.out.println("block #" + (i + 1) + "\npreviousHash:" + block.Previous_Hash_Block
-                    + "\nHash:" + block.Hash + "\ntimeStamp:" + block.Time_Stamp
-            );
+            blockchain+="block #"+(i+1)+"{\n"+"previousHash:"+"'"+block.Previous_Hash_Block+"'"+"\n"+"Block hash:"+
+            "'"+block.Hash+"'"+"\n"+"time stamp:"+"'"+block.Time_Stamp+"'"+"\n";
+//            System.out.println("block #" + (i + 1) + "\npreviousHash:" + block.Previous_Hash_Block
+//                    + "\nHash:" + block.Hash + "\ntimeStamp:" + block.Time_Stamp
+//            );
 
         }
+        return blockchain;
 
     }
 
